@@ -1,11 +1,14 @@
 {
-	"required": true,
-	"package": "io.github.sequentialentropy.mixin",
-	"compatibilityLevel": "JAVA_21",
-	"mixins": [
-		"ExampleMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
+  "required": true,
+  "package": "io.github.sequentialentropy.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "AbstractMinecartEntityInvoker",
+    "AbstractMinecartEntityMixin",
+    "ExperimentalMinecartControllerInvoker",
+    "ExperimentalMinecartControllerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
 	}
 }
