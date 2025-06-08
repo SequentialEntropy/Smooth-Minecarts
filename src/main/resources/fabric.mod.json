@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "smooth-minecarts",
+	"version": "${version}",
+	"name": "Smooth Minecarts",
+	"description": "Minecarts can smoothly turn gradual curves and slopes without snapping tightly to the center of rails.",
+	"authors": [
+		"SequentialEntropy"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/smooth-minecarts/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"io.github.sequentialentropy.SmoothMinecarts"
+		],
+		"client": [
+			"io.github.sequentialentropy.SmoothMinecartsClient"
+		]
+	},
+	"mixins": [
+		"smooth-minecarts.mixins.json",
+		{
+			"config": "smooth-minecarts.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.14",
+		"minecraft": "~1.21.2",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
