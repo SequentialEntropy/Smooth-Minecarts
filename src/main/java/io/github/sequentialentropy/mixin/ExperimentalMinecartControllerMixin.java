@@ -63,7 +63,7 @@ public abstract class ExperimentalMinecartControllerMixin extends MinecartContro
 
 			// Special handling for activator rails (which may trigger events)
 			if (blockState.isOf(Blocks.ACTIVATOR_RAIL)) {
-				this.minecart.onActivatorRail(blockPos.getX(), blockPos.getY(), blockPos.getZ(), (Boolean)blockState.get(PoweredRailBlock.POWERED));
+				this.minecart.onActivatorRail(blockPos.getX(), blockPos.getY(), blockPos.getZ(), blockState.get(PoweredRailBlock.POWERED));
 			}
 
 			// Determine rail shape (e.g., straight, curved, sloped)
