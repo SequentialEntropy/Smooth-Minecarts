@@ -1,6 +1,6 @@
 # Smooth Minecarts
 Here is a comparison between Vanilla (top) and Smooth Minecarts (bottom)
 
-![vanilla](https://github.com/user-attachments/assets/4f37103e-0e12-4b92-8ef5-c7b30706f229)
+![without-mod](https://github.com/user-attachments/assets/e9ac13fb-8b82-43a8-a869-6984481c7ad2)
 
-![smooth-minecarts](https://github.com/user-attachments/assets/00f71b7e-bc69-479f-a825-340757324356)
+![with-mod](https://github.com/user-attachments/assets/61c9abd8-d4f3-4e15-a32f-909ee82fbfeb)
