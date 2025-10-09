@@ -2,6 +2,7 @@
 This mod requires **Minecart Improvements** to be [ON]
 
 https://modrinth.com/mod/smooth-minecarts
+https://www.curseforge.com/minecraft/mc-mods/smooth-minecarts
 
 ## Features
 This survival-friendly mod enhances Minecart movement so they can _smoothly_ turn curves, non-45° diagonals and gradual inclines.
