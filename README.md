@@ -2,6 +2,7 @@
 This mod requires **Minecart Improvements** to be [ON]
 
 https://modrinth.com/mod/smooth-minecarts
+
 https://www.curseforge.com/minecraft/mc-mods/smooth-minecarts
 
 ## Features
