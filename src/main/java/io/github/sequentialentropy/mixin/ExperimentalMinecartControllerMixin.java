@@ -2,6 +2,7 @@ package io.github.sequentialentropy.mixin;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.sequentialentropy.RailShapeHelper;
+import io.github.sequentialentropy.config.Rules;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -38,7 +39,9 @@ public abstract class ExperimentalMinecartControllerMixin extends MinecartContro
 		ExperimentalMinecartControllerInvoker thisInvoker = (ExperimentalMinecartControllerInvoker) thisObject;
 		AbstractMinecartEntityInvoker minecartInvoker = (AbstractMinecartEntityInvoker) this.minecart;
 
-		int LOOKAHEAD_DISTANCE = 30;
+        // Get gamerule
+		int SAMPLING_DISTANCE = world.getGameRules().getInt(Rules.SAMPLING_DISTANCE);
+
 		// Get the current velocity of the minecart
 		Vec3d currentVelocity = this.getVelocity();
 		// Get the position of the rail or the cart itself
@@ -85,9 +88,9 @@ public abstract class ExperimentalMinecartControllerMixin extends MinecartContro
 				Vec3i ahead = b ? railDirections.getSecond() : railDirections.getFirst();
 
 				// Get rails ahead
-				List<Vec3d> points = RailShapeHelper.lookAhead(world, blockPos, ahead, LOOKAHEAD_DISTANCE);
+				List<Vec3d> points = RailShapeHelper.lookAhead(world, blockPos, ahead, SAMPLING_DISTANCE);
 
-				Vec3d newVelocity = derailmentAdjustedVelocity(adjustedVelocity, blockPos, points);
+				Vec3d newVelocity = derailmentAdjustedVelocity(world, adjustedVelocity, blockPos, points);
 
 				// Apply new velocity
 				this.setVelocity(newVelocity);
@@ -195,8 +198,9 @@ public abstract class ExperimentalMinecartControllerMixin extends MinecartContro
 	}
 
 	@Unique
-	private Vec3d derailmentAdjustedVelocity(Vec3d adjustedVelocity, BlockPos blockPos, List<Vec3d> points) {
-		final int CHECK_FOR_RAILS_AHEAD = 15;
+	private Vec3d derailmentAdjustedVelocity(ServerWorld world, Vec3d adjustedVelocity, BlockPos blockPos, List<Vec3d> points) {
+        // Get gamerule
+		final int STRAIGHTNESS_PRECHECK_DISTANCE = world.getGameRules().getInt(Rules.STRAIGHTNESS_PRECHECK_DISTANCE);
 
 		// Store rails ahead in set
 		HashSet<Vec3i> pointsSet = new HashSet<>();
@@ -211,7 +215,7 @@ public abstract class ExperimentalMinecartControllerMixin extends MinecartContro
 		double currentSpeed = adjustedVelocity.horizontalLength();
 
 		// Stores the velocity of the first successful raycast attempt for that length
-		Vec3d[] raycastCache = new Vec3d[Math.max(CHECK_FOR_RAILS_AHEAD, 1)];
+		Vec3d[] raycastCache = new Vec3d[Math.max(STRAIGHTNESS_PRECHECK_DISTANCE, 1)];
 
 		// Derailment prevention - repeatedly retry to smoothen the curve with fewer samples until the predicted position lands on the predicted path
 		for (int i = points.size(); i > 0; i--) {
@@ -226,7 +230,7 @@ public abstract class ExperimentalMinecartControllerMixin extends MinecartContro
 			if (raycastCache[0] == null) raycastCache[0] = averageVelocity;
 
 			// Repeatedly scale the velocity (raycast) and check if it is a valid rail
-			for (int distance = 1; distance <= CHECK_FOR_RAILS_AHEAD; distance++) {
+			for (int distance = 1; distance <= STRAIGHTNESS_PRECHECK_DISTANCE; distance++) {
 				Vec3d scaledVelocity = averageDirection.multiply(distance);
 				BlockPos raycastBlock = BlockPos.ofFloored(currentPos.add(scaledVelocity));
 
@@ -234,7 +238,7 @@ public abstract class ExperimentalMinecartControllerMixin extends MinecartContro
 				key = new Vec3i(raycastBlock.getX(), 0, raycastBlock.getZ());
 				if (!pointsSet.contains(key)) break;
 
-				if (distance == CHECK_FOR_RAILS_AHEAD) return averageVelocity;
+				if (distance == STRAIGHTNESS_PRECHECK_DISTANCE) return averageVelocity;
 
 				if (raycastCache[distance] == null) raycastCache[distance] = averageVelocity;
 			}

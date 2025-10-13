@@ -1,5 +1,6 @@
 package io.github.sequentialentropy;
 
+import io.github.sequentialentropy.config.Rules;
 import net.fabricmc.api.ModInitializer;
 
 import org.slf4j.Logger;
@@ -11,6 +12,8 @@ public class SmoothMinecarts implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		LOGGER.info("Initializing Smooth Minecarts");
+        LOGGER.info("Initializing Smooth Minecarts");
+
+        Rules.init();
 	}
 }
