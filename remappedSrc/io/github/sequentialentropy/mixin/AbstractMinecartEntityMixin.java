@@ -23,12 +23,12 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
      */
     @Inject(at = @At("RETURN"), method = "getRailOrMinecartPos()Lnet/minecraft/util/math/BlockPos;", cancellable = true)
     private void modifyGetRailOrMinecartPos(CallbackInfoReturnable<BlockPos> cir) {
-        if (AbstractMinecartEntity.areMinecartImprovementsEnabled(this.getEntityWorld())) {
+        if (AbstractMinecartEntity.areMinecartImprovementsEnabled(this.getWorld())) {
             BlockPos pos = cir.getReturnValue();
             BlockPos above = pos.up();
             if (
-                    !this.getEntityWorld().getBlockState(pos).isIn(BlockTags.RAILS) &&
-                    this.getEntityWorld().getBlockState(above).isIn(BlockTags.RAILS)
+                    !this.getWorld().getBlockState(pos).isIn(BlockTags.RAILS) &&
+                    this.getWorld().getBlockState(above).isIn(BlockTags.RAILS)
             ) {
                 cir.setReturnValue(above);
             }
