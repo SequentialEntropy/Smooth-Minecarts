@@ -1,19 +1,19 @@
 package io.github.sequentialentropy.mixin;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.vehicle.AbstractMinecartEntity;
-import net.minecraft.entity.vehicle.VehicleEntity;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.entity.vehicle.VehicleEntity;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(AbstractMinecartEntity.class)
-public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
-    public AbstractMinecartEntityMixin(EntityType<?> entityType, World world) {
+@Mixin(AbstractMinecart.class)
+public abstract class AbstractMinecartMixin extends VehicleEntity {
+    public AbstractMinecartMixin(EntityType<?> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -21,14 +21,14 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
      * When the minecart is noclipping inside a block when descending,
      * return the actual rail which would be one block above
      */
-    @Inject(at = @At("RETURN"), method = "getRailOrMinecartPos()Lnet/minecraft/util/math/BlockPos;", cancellable = true)
-    private void modifyGetRailOrMinecartPos(CallbackInfoReturnable<BlockPos> cir) {
-        if (AbstractMinecartEntity.areMinecartImprovementsEnabled(this.getWorld())) {
+    @Inject(at = @At("RETURN"), method = "getCurrentBlockPosOrRailBelow()Lnet/minecraft/core/BlockPos;", cancellable = true)
+    private void modifyGetCurrentBlockPosOrRailBelow(CallbackInfoReturnable<BlockPos> cir) {
+        if (AbstractMinecart.useExperimentalMovement(this.level())) {
             BlockPos pos = cir.getReturnValue();
-            BlockPos above = pos.up();
+            BlockPos above = pos.above();
             if (
-                    !this.getWorld().getBlockState(pos).isIn(BlockTags.RAILS) &&
-                    this.getWorld().getBlockState(above).isIn(BlockTags.RAILS)
+                    !this.level().getBlockState(pos).is(BlockTags.RAILS) &&
+                    this.level().getBlockState(above).is(BlockTags.RAILS)
             ) {
                 cir.setReturnValue(above);
             }

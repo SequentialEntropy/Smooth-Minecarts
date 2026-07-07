@@ -1,19 +1,19 @@
 package io.github.sequentialentropy.mixin;
 
-import net.minecraft.entity.vehicle.AbstractMinecartEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(AbstractMinecartEntity.class)
-public interface AbstractMinecartEntityInvoker {
-    @Invoker("moveOffRail")
-    void invokeMoveOffRail(ServerWorld world);
+@Mixin(AbstractMinecart.class)
+public interface AbstractMinecartInvoker {
+    @Invoker("comeOffTrack")
+    void invokeComeOffTrack(ServerLevel world);
 
-    @Invoker("applySlowdown")
-    Vec3d invokeApplySlowdown(Vec3d velocity);
+    @Invoker("applyNaturalSlowdown")
+    Vec3 invokeApplyNaturalSlowdown(Vec3 velocity);
 
     @Invoker("getMaxSpeed")
-    double invokeGetMaxSpeed(ServerWorld world);
+    double invokeGetMaxSpeed(ServerLevel world);
 }

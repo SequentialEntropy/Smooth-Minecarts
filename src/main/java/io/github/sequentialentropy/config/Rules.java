@@ -2,11 +2,11 @@ package io.github.sequentialentropy.config;
 
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
-import net.minecraft.world.GameRules;
+import net.minecraft.world.level.GameRules;
 
 public class Rules {
-    public static GameRules.Key<GameRules.IntRule> SAMPLING_DISTANCE;
-    public static GameRules.Key<GameRules.IntRule> STRAIGHTNESS_PRECHECK_DISTANCE;
+    public static GameRules.Key<GameRules.IntegerValue> SAMPLING_DISTANCE;
+    public static GameRules.Key<GameRules.IntegerValue> STRAIGHTNESS_PRECHECK_DISTANCE;
     public static void init() {
         // Maximum distance (in blocks) used to sample rail points for curve smoothing.
         SAMPLING_DISTANCE = GameRuleRegistry.register(
