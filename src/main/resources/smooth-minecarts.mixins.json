@@ -3,10 +3,10 @@
   "package": "io.github.sequentialentropy.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "AbstractMinecartEntityInvoker",
-    "AbstractMinecartEntityMixin",
-    "ExperimentalMinecartControllerInvoker",
-    "ExperimentalMinecartControllerMixin"
+    "AbstractMinecartInvoker",
+    "AbstractMinecartMixin",
+    "NewMinecartBehaviorInvoker",
+    "NewMinecartBehaviorMixin"
   ],
   "injectors": {
     "defaultRequire": 1
