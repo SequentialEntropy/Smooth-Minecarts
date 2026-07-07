@@ -1,7 +1,7 @@
 {
   "required": true,
   "package": "io.github.sequentialentropy.mixin",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "JAVA_25",
   "mixins": [
     "AbstractMinecartInvoker",
     "AbstractMinecartMixin",
