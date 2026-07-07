@@ -13,9 +13,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.vehicle.AbstractMinecart;
-import net.minecraft.world.entity.vehicle.MinecartBehavior;
-import net.minecraft.world.entity.vehicle.NewMinecartBehavior;
+import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
+import net.minecraft.world.entity.vehicle.minecart.MinecartBehavior;
+import net.minecraft.world.entity.vehicle.minecart.NewMinecartBehavior;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.PoweredRailBlock;
@@ -40,7 +40,7 @@ public abstract class NewMinecartBehaviorMixin extends MinecartBehavior {
 		AbstractMinecartInvoker minecartInvoker = (AbstractMinecartInvoker) this.minecart;
 
         // Get gamerule
-		int SAMPLING_DISTANCE = world.getGameRules().getInt(Rules.SAMPLING_DISTANCE);
+		int SAMPLING_DISTANCE = world.getGameRules().get(Rules.SAMPLING_DISTANCE);
 
 		// Get the current velocity of the minecart
 		Vec3 currentVelocity = this.getDeltaMovement();
@@ -66,7 +66,7 @@ public abstract class NewMinecartBehaviorMixin extends MinecartBehavior {
 
 			// Special handling for activator rails (which may trigger events)
 			if (blockState.is(Blocks.ACTIVATOR_RAIL)) {
-				this.minecart.activateMinecart(blockPos.getX(), blockPos.getY(), blockPos.getZ(), blockState.getValue(PoweredRailBlock.POWERED));
+				this.minecart.activateMinecart(world, blockPos.getX(), blockPos.getY(), blockPos.getZ(), blockState.getValue(PoweredRailBlock.POWERED));
 			}
 
 			// Determine rail shape (e.g., straight, curved, sloped)
@@ -200,7 +200,7 @@ public abstract class NewMinecartBehaviorMixin extends MinecartBehavior {
 	@Unique
 	private Vec3 derailmentAdjustedVelocity(ServerLevel world, Vec3 adjustedVelocity, BlockPos blockPos, List<Vec3> points) {
         // Get gamerule
-		final int STRAIGHTNESS_PRECHECK_DISTANCE = world.getGameRules().getInt(Rules.STRAIGHTNESS_PRECHECK_DISTANCE);
+		final int STRAIGHTNESS_PRECHECK_DISTANCE = world.getGameRules().get(Rules.STRAIGHTNESS_PRECHECK_DISTANCE);
 
 		// Store rails ahead in set
 		HashSet<Vec3i> pointsSet = new HashSet<>();
