@@ -36,8 +36,8 @@ public abstract class NewMinecartBehaviorMixin extends MinecartBehavior {
 	@Overwrite
 	public void moveAlongTrack(ServerLevel world) {
 		NewMinecartBehavior thisObject = (NewMinecartBehavior) (Object) this;
-		ExperimentalMinecartControllerInvoker thisInvoker = (ExperimentalMinecartControllerInvoker) thisObject;
-		AbstractMinecartEntityInvoker minecartInvoker = (AbstractMinecartEntityInvoker) this.minecart;
+		NewMinecartBehaviorInvoker thisInvoker = (NewMinecartBehaviorInvoker) thisObject;
+		AbstractMinecartInvoker minecartInvoker = (AbstractMinecartInvoker) this.minecart;
 
         // Get gamerule
 		int SAMPLING_DISTANCE = world.getGameRules().getInt(Rules.SAMPLING_DISTANCE);
@@ -156,8 +156,8 @@ public abstract class NewMinecartBehaviorMixin extends MinecartBehavior {
 	) {
 
 		NewMinecartBehavior thisObject = (NewMinecartBehavior) (Object) this;
-		ExperimentalMinecartControllerInvoker thisInvoker = (ExperimentalMinecartControllerInvoker) thisObject;
-		AbstractMinecartEntityInvoker minecartInvoker = (AbstractMinecartEntityInvoker) this.minecart;
+        NewMinecartBehaviorInvoker thisInvoker = (NewMinecartBehaviorInvoker) thisObject;
+		AbstractMinecartInvoker minecartInvoker = (AbstractMinecartInvoker) this.minecart;
 
 		// --- Apply slope adjustment once ---
 		// Adjust velocity if the rail is on a slope (e.g., ascending/descending)
