@@ -217,9 +217,15 @@ public abstract class NewMinecartBehaviorMixin extends MinecartBehavior {
 		// Stores the velocity of the first successful raycast attempt for that length
 		Vec3[] raycastCache = new Vec3[Math.max(STRAIGHTNESS_PRECHECK_DISTANCE, 1)];
 
+        Vec3 fullAverageDirection = RailShapeHelper.averageDirection(currentPos, points);
+        Vec3 fullAverageVelocity = fullAverageDirection.scale(currentSpeed);
+
 		// Derailment prevention - repeatedly retry to smoothen the curve with fewer samples until the predicted position lands on the predicted path
 		for (int i = points.size(); i > 0; i--) {
-			Vec3 averageDirection = RailShapeHelper.averageDirection(currentPos, points.subList(0, i));
+            // Only take the x & z component for derailment check
+			Vec3 averageDirection = RailShapeHelper.averageDirection(currentPos, points.subList(0, i))
+                    .horizontal()
+                    .normalize();
 			Vec3 averageVelocity = averageDirection.scale(currentSpeed);
 
 			BlockPos predictedBlock = BlockPos.containing(currentPos.add(averageVelocity));
@@ -227,7 +233,11 @@ public abstract class NewMinecartBehaviorMixin extends MinecartBehavior {
 			Vec3i key = new Vec3i(predictedBlock.getX(), 0, predictedBlock.getZ());
 			if (!pointsSet.contains(key)) continue;
 			// Cache the unscaled velocity
-			if (raycastCache[0] == null) raycastCache[0] = averageVelocity;
+			if (raycastCache[0] == null) raycastCache[0] = new Vec3(
+                    averageVelocity.x(),
+                    fullAverageVelocity.y(), // Add back the y component after derailment check
+                    averageVelocity.z()
+            );
 
 			// Repeatedly scale the velocity (raycast) and check if it is a valid rail
 			for (int distance = 1; distance <= STRAIGHTNESS_PRECHECK_DISTANCE; distance++) {
@@ -238,9 +248,17 @@ public abstract class NewMinecartBehaviorMixin extends MinecartBehavior {
 				key = new Vec3i(raycastBlock.getX(), 0, raycastBlock.getZ());
 				if (!pointsSet.contains(key)) break;
 
-				if (distance == STRAIGHTNESS_PRECHECK_DISTANCE) return averageVelocity;
+				if (distance == STRAIGHTNESS_PRECHECK_DISTANCE) return new Vec3(
+                        averageVelocity.x(),
+                        fullAverageVelocity.y(), // Add back the y component after derailment check
+                        averageVelocity.z()
+                );
 
-				if (raycastCache[distance] == null) raycastCache[distance] = averageVelocity;
+				if (raycastCache[distance] == null) raycastCache[distance] = new Vec3(
+                        averageVelocity.x(),
+                        fullAverageVelocity.y(), // Add back the y component after derailment check
+                        averageVelocity.z()
+                );
 			}
 		}
 
